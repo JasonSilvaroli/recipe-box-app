@@ -5,8 +5,9 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
-import LinksScreen from '../screens/LinksScreen';
-import SettingsScreen from '../screens/SettingsScreen';
+import LoginScreen from '../screens/LoginScreen';
+import RegisterScreen from '../screens/RegisterScreen';
+import SecurityQuestionsScreen from '../screens/SecurityQuestionsScreen';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -15,13 +16,14 @@ const config = Platform.select({
 
 const HomeStack = createStackNavigator(
   {
-    Home: HomeScreen,
+    Home: {screen: HomeScreen},
+    SecurityQuestions: {screen: SecurityQuestionsScreen},
   },
   config
 );
 
 HomeStack.navigationOptions = {
-  tabBarLabel: 'Home',
+  tabBarLabel: 'Login',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
@@ -36,42 +38,50 @@ HomeStack.navigationOptions = {
 
 HomeStack.path = '';
 
-const LinksStack = createStackNavigator(
+const LoginsStack = createStackNavigator(
   {
-    Links: LinksScreen,
+    Login: LoginScreen,
   },
   config
 );
 
-LinksStack.navigationOptions = {
-  tabBarLabel: 'Links',
+LoginsStack.navigationOptions = {
+  tabBarLabel: 'Register',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
   ),
 };
 
-LinksStack.path = '';
+LoginsStack.path = '';
 
-const SettingsStack = createStackNavigator(
+const RegistersStack = createStackNavigator(
   {
-    Settings: SettingsScreen,
+    Register: RegisterScreen,
   },
   config
 );
 
-SettingsStack.navigationOptions = {
-  tabBarLabel: 'Settings',
+const SecurityQuestionsStack = createStackNavigator(
+  {
+    SecurityQuestions: SecurityQuestionsScreen,
+  },
+  config
+);
+
+RegistersStack.navigationOptions = {
+  tabBarLabel: 'Security Q',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'} />
   ),
 };
 
-SettingsStack.path = '';
+RegistersStack.path = '';
 
+createStackNavigator
 const tabNavigator = createBottomTabNavigator({
   HomeStack,
-  LinksStack,
-  SettingsStack,
+  LoginsStack,
+  RegistersStack,
 });
 
 tabNavigator.path = '';
