@@ -3,24 +3,35 @@ import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
 import React, { useState } from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
-import { Provider as PaperProvider } from 'react-native-paper';
+import { DefaultTheme, Drawer, Provider as PaperProvider } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
+import  { NavigationAction}  from 'react-navigation';
 //import { ApplicationProvider, Layout, Text } from '@ui-kitten/components';
 
 import AppNavigator from './navigation/AppNavigator';
 
 export default function App(props) {
+  
+  const theme = {
+  ...DefaultTheme,
+  roundness: 2,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: 'tomato',
+    accent: 'yellow',
+  },
+};
   const [isLoadingComplete, setLoadingComplete] = useState(false);
   if (!isLoadingComplete && !props.skipLoadingScreen) {
     return (
-      <PaperProvider>
-     
+      
+      <PaperProvider theme={theme}>
+        <StatusBar hidden={true}></StatusBar>
       <AppLoading
         startAsync={loadResourcesAsync}
         onError={handleLoadingError}
         onFinish={() => handleFinishLoading(setLoadingComplete)}
       />
-      
     </PaperProvider>
     );
   } else {

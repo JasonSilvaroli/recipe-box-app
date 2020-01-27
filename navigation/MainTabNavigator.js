@@ -1,12 +1,18 @@
 import React from 'react';
-import { Platform } from 'react-native';
+import { Platform, Text } from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
-import { createBottomTabNavigator } from 'react-navigation-tabs';
+import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
-import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import PageNotFound from '../screens/PageNotFound';
+import UserProfileScreen from '../screens/UserProfileScreen';
+import LoginScreen from '../screens/LoginScreen';
+import RegisterScreen from '../screens/RegisterScreen';
+import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
+import SecurityQuestionScreen from '../screens/SecurityQuestionScreen';
+import DevScreen from '../screens/DevScreen';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -16,41 +22,59 @@ const config = Platform.select({
 const HomeStack = createStackNavigator(
   {
     Home: HomeScreen,
+    UserProfile: UserProfileScreen,
   },
   config
 );
 
 HomeStack.navigationOptions = {
-  tabBarLabel: 'Home',
+  tabBarLabel: <Text style={{ fontSize: 14 }}> Home </Text>,
+  size: 30,
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
-      }
+      name={'home'}
     />
   ),
 };
 
 HomeStack.path = '';
 
-const LinksStack = createStackNavigator(
+const AccountStack = createStackNavigator(
   {
-    Links: LinksScreen,
+    Login: LoginScreen,
+    Register: RegisterScreen,
+    ForgotPassword: ForgotPasswordScreen,
+    UserAccount: PageNotFound,
+    SecurityQuestion: SecurityQuestionScreen,
   },
   config
 );
 
-LinksStack.navigationOptions = {
-  tabBarLabel: 'Links',
+AccountStack.navigationOptions = {
+  tabBarLabel: <Text style={{ fontSize: 14 }}> Account </Text>,
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
+    <TabBarIcon focused={focused} name={'account'} />
   ),
 };
 
-LinksStack.path = '';
+AccountStack.path = '';
+
+const SearchStack = createStackNavigator(
+  {
+    Search: DevScreen,
+  },
+  config
+);
+
+SearchStack.navigationOptions = {
+  tabBarLabel: <Text style={{ fontSize: 14 }}> Search </Text>,
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon focused={focused} name={'magnify'} />
+  ),
+};
+
+SearchStack.path = '';
 
 const SettingsStack = createStackNavigator(
   {
@@ -60,20 +84,41 @@ const SettingsStack = createStackNavigator(
 );
 
 SettingsStack.navigationOptions = {
-  tabBarLabel: 'Settings',
+  tabBarLabel: <Text style={{ fontSize: 14 }}> Settings </Text>,
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'} />
+    <TabBarIcon focused={focused} name={'settings'} />
   ),
 };
 
 SettingsStack.path = '';
 
-const tabNavigator = createBottomTabNavigator({
+const OptionsStack = createStackNavigator(
+  {
+    Options: PageNotFound,
+  },
+  config
+);
+
+OptionsStack.navigationOptions = {
+  tabBarLabel: <Text style={{ fontSize: 14 }}> Options </Text>,
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon focused={focused} name={'camera-control'} />
+  ),
+};
+
+OptionsStack.path = '';
+
+const tabNavigator = createMaterialBottomTabNavigator({
   HomeStack,
-  LinksStack,
+  AccountStack,
+  SearchStack,
   SettingsStack,
-});
+  OptionsStack
+}, {
+    inactiveColor: '#BDBDBD',
+    activeColor: '#FFFFFF',
+    barStyle: { backgroundColor: "#EC407A" }
+  });
 
 tabNavigator.path = '';
-
 export default tabNavigator;
