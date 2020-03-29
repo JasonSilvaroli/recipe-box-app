@@ -25,6 +25,8 @@ import SearchResultScreen from '../screens/SearchResultScreen';
 
 import Loading from '../screens/Loading';
 import ViewRecipeScreen from '../screens/ViewRecipeScreen';
+import UserHomeScreen from '../screens/UserHomeScreen';
+import ShareRecipeScreen from '../screens/ShareRecipeScreen';
 const config = Platform.select({
   web: { headerMode: 'screen' },
   default: {},
@@ -32,7 +34,9 @@ const config = Platform.select({
 
 const HomeStack = createStackNavigator(
   {
-    Home: HomeScreen
+    UserHomeScreen: UserHomeScreen,
+    ViewRandomRecipe: ViewRecipeScreen,
+
   },
   config
 );
@@ -52,7 +56,7 @@ HomeStack.path = '';
 
 const AccountStack = createStackNavigator(
   {
-    //    Register: RegisterScreen,
+
     UserProfile: UserProfileScreen,
     UserAccount: UserProfileFormScreen,
     ForgotPassword: ForgotPasswordScreen,
@@ -64,6 +68,7 @@ const AccountStack = createStackNavigator(
     ChangeEmail: ChangeEmailScreen,
     ChangePassword: ChangePasswordScreen,
     DeleteUser: DeleteUserScreen,
+    ShareRecipe: ShareRecipeScreen
 
   },
   config

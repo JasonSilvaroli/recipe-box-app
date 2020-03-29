@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, FlatList, Platform, Text, Dimensions, ScrollView, SafeAreaView } from 'react-native';
 import axios from 'axios'
 import '../configure/apiKey.json'
@@ -6,7 +6,6 @@ import RecipeCards from '../components/RecipeCards';
 import { PulseIndicator } from 'react-native-indicators';
 import ViewRecipe from './ViewRecipe';
 import { Button, Title } from 'react-native-paper';
-import Pagination, { Icon, Dot } from 'react-native-pagination';//{Icon,Dot} also available
 
 
 const styles = StyleSheet.create({
@@ -48,21 +47,13 @@ function SearchResults({ navigation, ingredQuery }) {
   const [items, setItems] = useState([{}]); //useState is initial state to manage items being updated.
   const [itemCount, setItemCount] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [viewItem, setViewItems] = useState([{}]);
-  const [itemsViewed, setItemsViewed] = useState(0);
-  const [isEnd, setIsEnd] = useState(false);
   let counter = 0;
   let numOfItemsViewed = 0;
   let resultsPerPage = 10;
+  var queryLength = 0;
 
-  const ref = useRef();
-
-  var basicQuery = navigation.getParam('searchQuery');
   var results = JSON.parse(navigation.state.params.results);
   var query = "";
-  var queryLength = 0;
-  console.log("##########     RESULTS")
-  console.log(results)
   function getQuery() {
 
     if (results.query != "") {
@@ -108,50 +99,12 @@ function SearchResults({ navigation, ingredQuery }) {
         const items = res.data.results;
         setItems(items);
         setItemCount(items.length);
-        //  setLoading(false);
-        let newItems = items.splice(counter, counter + resultsPerPage);
-        let initialLength = newItems.length;
-        setViewItems(newItems);
-
-        counter = counter + resultsPerPage;
-
-        numOfItemsViewed = numOfItemsViewed + initialLength;
         setLoading(false);
       })
 
 
 
   }, []);
-  const onViewableItemsChanged = () => ({ items, changed }) => setItems(items)
-  const getNextItems = () => {
-    setLoading(true);
-    if (numOfItemsViewed > [itemCount]) {
-      setIsEnd(true);
-    }
-    let newItems;
-    if (counter + resultsPerPage < [itemCount]) {
-      newItems = items.splice(counter, counter + resultsPerPage);
-      numOfItemsViewed = numOfItemsViewed + newItems.length;
-    }
-    else {
-      newItems = items.splice(counter, [itemCount]);
-      numOfItemsViewed = numOfItemsViewed + newItems.length;
-    }
-
-    setViewItems(newItems);
-    setLoading(false);
-    counter = counter + 10;
-
-
-  }
-  const getPrevItems = () => {
-    setLoading(true);
-    let newItems = items.splice(counter, counter + 10);
-    setViewItems(newItems);
-    setLoading(false);
-
-    counter + 10;
-  }
 
 
   /*
@@ -174,16 +127,14 @@ function SearchResults({ navigation, ingredQuery }) {
 
       </SafeAreaView>
     )
-  } else if (viewItem.length > 0) {
+  } else if (items.length > 0) {
     return (
-      <SafeAreaView style={{ flex: 1 }}>
-        {/*
+      <SafeAreaView>
+
         <FlatList
           style={styles.container}
-          pagingEnabled={true}
-          initialNumToRender={15}
-          snapToAlignment={"center"}
 
+          snapToAlignment={"center"}
           data={items}
           ListHeaderComponent={<Title style={{ marginBottom: 4, alignSelf: "center" }}> Found {itemCount} results</Title>}
           keyExtractor={(item, index) => index.toString()}
@@ -191,24 +142,9 @@ function SearchResults({ navigation, ingredQuery }) {
 
         //renderItem={({item}) => <ViewRecipe item={item}/>}
         />
-*/}
-        <FlatList
-          style={styles.container}
-          pagingEnabled={true}
-          initialNumToRender={15}
-          snapToAlignment={"center"}
 
-          data={viewItem}
-          ListHeaderComponent={<Title style={{ marginBottom: 4, alignSelf: "center" }}> Found {itemCount} results</Title>}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item }) => <RecipeCards navigation={navigation} oneitem={item} />}
+      </SafeAreaView>
 
-        //renderItem={({item}) => <ViewRecipe item={item}/>}
-        />
-        {
-        //<Button disabled={isEnd} onPress={getNextItems}> Next</Button>
-        }
-        </SafeAreaView>
 
     );
   }

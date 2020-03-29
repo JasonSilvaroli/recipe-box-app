@@ -91,9 +91,12 @@ function UserProfile({ props, user }) {
   }*/
   // Fill with data from API call for user saved recipes  
   const savedRecipes = [
-    /*{ title: "Recipe 1", source: 'https://picsum.photos/200', key: 'item1' },
-    { title: "Recipe 2", source: 'https://picsum.photos/200', key: 'item2' },
-    { title: "Recipe 3", source: 'https://picsum.photos/200', key: 'item3' }*/
+    { title: "Pasta", source: "https://spoonacular.com/recipeImages/749013-312x231.jpeg", id: '749013' },
+    { title: "Chicken Pho", source: "https://spoonacular.com/recipeImages/737537-312x231.jpeg", id: '737537' },
+    { title: "Beef Stew", source: "https://spoonacular.com/recipeImages/297488-312x231.jpeg", id: '297488' },
+    { title: "Pasta", source: "https://spoonacular.com/recipeImages/749013-312x231.jpeg", id: '749013' },
+    { title: "Chicken Pho", source: "https://spoonacular.com/recipeImages/737537-312x231.jpeg", id: '737537' },
+    { title: "Beef Stew", source: "https://spoonacular.com/recipeImages/297488-312x231.jpeg", id: '297488' }
   ];
 
   // Fill with data from API call for user cookbooks  
@@ -109,8 +112,10 @@ function UserProfile({ props, user }) {
   // Returns the cards for saved Recipes
   const showRecipeCard = ({ item: item }) => {
 
+    var recipe = JSON.stringify(item);
+
     return (
-      <Card key={item.key} style={{ width: 200 }} onPress={() => props.navigate('Recipes')}>
+      <Card key={item.id} style={{ width: 200 }} onPress={() => props.navigate('ViewAdvancedRecipe', { props: recipe })}>
         <Card.Cover source={{ uri: item.source }}></Card.Cover>
         <Card.Content>
           <Title >{item.title}</Title>
@@ -147,7 +152,7 @@ function UserProfile({ props, user }) {
   const noSavedRecipes = () => {
 
     return (
-      <View>
+      <View style={{justifyContent: 'center'}}>
         <Button style={{ marginHorizontal: 10, marginVertical: 20, backgroundColor: '#64B5F6' }} mode="contained" onPress={() => props.navigate('Search')}>
           Go to Recipes
       </Button>
@@ -209,7 +214,7 @@ function UserProfile({ props, user }) {
 
       <View style={styles.innerContainer} >
         <Subheading style={{ color: '#EEEEEE', fontSize: 20, marginVertical: 10 }}>Saved Recipes</Subheading>
-
+        <ScrollView horizontal={true}   style={{width: 300}}>
         {
           <FlatList
             ListEmptyComponent={noSavedRecipes}
@@ -221,6 +226,7 @@ function UserProfile({ props, user }) {
 
           />
         }
+        </ScrollView>
       </View>
 
       <View style={styles.innerContainer} >
