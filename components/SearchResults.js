@@ -56,23 +56,17 @@ function SearchResults({ navigation, ingredQuery }) {
   let resultsPerPage = 10;
 
   const ref = useRef();
-  console.log('I GOT ::::::::::');
 
-  //  console.log(navigation.state.params);
   var basicQuery = navigation.getParam('searchQuery');
-  console.log("BASIC QUERY: " + basicQuery);
   var results = JSON.parse(navigation.state.params.results);
   var query = "";
   var queryLength = 0;
+  console.log("##########     RESULTS")
+  console.log(results)
   function getQuery() {
-
-    console.log("######getQuery() results")
-    console.log(results);
-
 
     if (results.query != "") {
 
-      console.log("good");
       queryLength++;
       query += "&query=" + results.query;
 
@@ -80,7 +74,6 @@ function SearchResults({ navigation, ingredQuery }) {
 
     if (results.cuisine != "") {
 
-      console.log("good");
       queryLength++;
       query += "&cuisine=" + results.cuisine;
 
@@ -88,7 +81,6 @@ function SearchResults({ navigation, ingredQuery }) {
 
     if (results.intolerances != "") {
 
-      console.log("good");
       queryLength++;
       query += "&intolerances=" + results.intolerances;
 
@@ -96,44 +88,34 @@ function SearchResults({ navigation, ingredQuery }) {
 
     if (results.includeIngredients != "") {
 
-      console.log("good");
       queryLength++;
       query += "&includeIngredients=" + results.includeIngredients;
 
     }
     let apiKey = require('../configure/apiKey.json');
-    console.log('This is query');
-    console.log(query);
     query = 'https://api.spoonacular.com/recipes/complexSearch?apiKey=' + apiKey.key + query + '&addRecipeInformation=true&number=20';
 
+    console.log(query)
 
-    console.log("######getQuery() query")
-    console.log(query);
     return query;
   }
 
   useEffect(() => {
 
     var url = getQuery();
-    console.log("URL");
-    console.log(url);
     axios.get(url)
       .then(res => {
-        console.log(res);
         const items = res.data.results;
-        console.log(items);
         setItems(items);
         setItemCount(items.length);
         //  setLoading(false);
         let newItems = items.splice(counter, counter + resultsPerPage);
         let initialLength = newItems.length;
-        console.log("NEW LIST ITEMS :::: " + newItems.length);
         setViewItems(newItems);
 
         counter = counter + resultsPerPage;
 
         numOfItemsViewed = numOfItemsViewed + initialLength;
-        console.log('VIEWED Init ITEMS COUNT ===== ' + numOfItemsViewed);
         setLoading(false);
       })
 
@@ -143,15 +125,12 @@ function SearchResults({ navigation, ingredQuery }) {
   const onViewableItemsChanged = () => ({ items, changed }) => setItems(items)
   const getNextItems = () => {
     setLoading(true);
-    console.log('ITEM V COUNT --- ' + numOfItemsViewed);
     if (numOfItemsViewed > [itemCount]) {
       setIsEnd(true);
     }
     let newItems;
     if (counter + resultsPerPage < [itemCount]) {
-      console.log('UNDER LIMMIT');
       newItems = items.splice(counter, counter + resultsPerPage);
-      console.log("NEW LIST ITEMS :::: " + newItems.length);
       numOfItemsViewed = numOfItemsViewed + newItems.length;
     }
     else {
@@ -160,10 +139,7 @@ function SearchResults({ navigation, ingredQuery }) {
     }
 
     setViewItems(newItems);
-    //  console.log("NEW LIST ITEMS :::: " + newItems.length);
     setLoading(false);
-
-    console.log('VIEWED ITEMS COUNT ===== ' + numOfItemsViewed);
     counter = counter + 10;
 
 
@@ -171,9 +147,7 @@ function SearchResults({ navigation, ingredQuery }) {
   const getPrevItems = () => {
     setLoading(true);
     let newItems = items.splice(counter, counter + 10);
-    console.log("NEW LIST ITEMS :::: " + newItems.length);
     setViewItems(newItems);
-    console.log("NEW LIST ITEMS :::: " + newItems.length);
     setLoading(false);
 
     counter + 10;

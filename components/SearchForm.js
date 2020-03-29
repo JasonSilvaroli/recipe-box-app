@@ -68,7 +68,7 @@ function SearchForm({ props }) {
   const [ingredients, setIngredients] = useState([]);
   const [chips, setChips] = useState([]);
   const cuisine = ['None', 'African', 'British', 'Cajun', 'Caribbean', 'Chinese', 'Eastern European', 'European', 'French', 'German', 'Greek', 'Indian', 'Irish', 'Italian', 'Japanese', 'Jewish', 'Korean', 'Latin American', 'Mediterranean', 'Mexican', 'Middle Eastern', 'Nordic', 'Southern', 'Vietnamese', 'Thai', 'Spanish'];
-  const dietary = ['Dairy', 'Egg', 'Gluten', 'Grain', 'Peanut', 'Seafood' , 'Sesame', 'Shellfish', 'Soy', 'Sulfite', 'Tree Nut', 'Wheat']
+  const dietary = ['None', 'Dairy', 'Egg', 'Gluten', 'Grain', 'Peanut', 'Seafood' , 'Sesame', 'Shellfish', 'Soy', 'Sulfite', 'Tree Nut', 'Wheat']
   const { control, handleSubmit, errors, setError } = useForm({ mode: 'onChange' });
   const _showModal = () => { setVisibleModal(true) };
   const _hideModal = () => { setVisibleModal(false) };
@@ -80,10 +80,6 @@ function SearchForm({ props }) {
     results.cuisine = "";
     results.query = "";
     results.intolerances = "";  
-    console.log("Ingredients")
-    console.log(ingredients);
-    console.log("chips");
-    console.log(chips);
     
     var num = 0;
         
@@ -103,7 +99,6 @@ function SearchForm({ props }) {
 
     if(selectedCuisine != "None") {
       num++;
-      console.log(selectedCuisine);
       results.cuisine = selectedCuisine;
 
     }
@@ -114,26 +109,14 @@ function SearchForm({ props }) {
 
     }
 
-    if(selectedDietary.length != 0) {
+    if(selectedDietary != "None") {
       num++;
-      
-      for(var i in selectedDietary) {
+      results.intolerances = selectedDietary;
 
-      for (var i in selectedDietary) {
-
-        if (i > 0 && selectedDietary[i] != "") {
-
-          results.intolerances += ',';
-
-        }
-        if (selectedDietary[i] != '') {
-
-          results.intolerances += selectedDietary[i];
-        }
-      }
     }
-  }
-
+    
+    console.log(selectedDietary)
+    console.log(results)
     const result = JSON.stringify(results);
 
     if(num > 0) {
